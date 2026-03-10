@@ -2,6 +2,30 @@ class Solution {
     public int numDecodings(String s) {
         int n=s.length();
         int[] dp=new int[n];
+        Arrays.fill(dp,-1);
+        return solve(0,s,n,dp);
+    }
+    public int solve(int i,String s,int n,int[] dp){
+        if(i==n) return 1;  // one valid sol found
+        if(dp[i]!=-1) return dp[i];
+        if(s.charAt(i)=='0') return 0;
+
+        int single_digit=solve(i+1,s,n,dp);
+        int double_dig=0;
+        if(i+1<n && (s.charAt(i)=='1' || (s.charAt(i)=='2' && s.charAt(i+1)<='6'))){
+            double_dig=solve(i+2,s,n,dp);
+        }
+
+        return dp[i]=single_digit+double_dig;
+    }
+}
+
+/*
+
+    class Solution {
+    public int numDecodings(String s) {
+        int n=s.length();
+        int[] dp=new int[n];
 
         if(s.charAt(0)=='0') return 0;
         dp[0]=1;
@@ -23,48 +47,7 @@ class Solution {
     }
 }
 
-/* pass for 183/269 testcases failed for
-{
-    "2101"
 
-    output:'3'
-    expected='1'
-}
 
-class Solution {
-    public int numDecodings(String s) {
-        int n=s.length();
-        int[] dp=new int[n];
-
-        if(s.charAt(0)=='0') return 0;
-        dp[0]=1;
-
-        for(int i=1;i<n;i++){
-            if(s.charAt(i)=='0'){
-                if(s.charAt(i-1)=='0'){
-                    return 0;
-                }
-                else{
-                    dp[i]=dp[i-1];
-                }
-            }
-            else if(s.charAt(i-1)=='2'){
-                if(s.charAt(i)>'6'){
-                    dp[i]=dp[i-1];
-                }
-                else{
-                    dp[i]=dp[i-1]+1;
-                }
-            }
-            else if(s.charAt(i-1)>'2'){
-                dp[i]=dp[i-1];
-            }
-            else{
-                dp[i]=dp[i-1]+1;
-            }
-        }
-        return dp[n-1];
-    }
-}
 
 */
