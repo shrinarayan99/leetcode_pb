@@ -27,7 +27,31 @@ class Solution {
         Queue<Node> q=new LinkedList<>();
 
         q.add(root);
+        
+        q.add(null); // level separator
+
         while(!q.isEmpty()){
+            Node curr = q.poll();
+
+            if(curr == null){
+                if(!q.isEmpty()){
+                    q.add(null); // next level marker
+                }
+            } else {
+                curr.next = q.peek(); // next node OR null
+
+                if(curr.left != null) q.add(curr.left);
+                if(curr.right != null) q.add(curr.right);
+            }
+        }
+
+            return root;
+        }
+    }
+
+/*
+
+    while(!q.isEmpty()){
             int s=q.size();
             Node prev=null;
             for(int i=0;i<s;i++){
@@ -46,3 +70,6 @@ class Solution {
     }
     
 }
+
+*/
+
