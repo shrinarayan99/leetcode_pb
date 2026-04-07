@@ -5,12 +5,12 @@ class Solution {
         for(int i=0;i<plantTime.length;i++){
             pq.add(new int[] {growTime[i],plantTime[i]});
         }
-        int days=0;
+        int days=-1;
         int ans=0;
         while(!pq.isEmpty()){
             int[] curr=pq.poll();
             days+=curr[1];
-            ans=Math.max(ans,days+curr[0]);
+            ans=Math.max(ans,days+curr[0]+1);
         }
         return ans;
     }
