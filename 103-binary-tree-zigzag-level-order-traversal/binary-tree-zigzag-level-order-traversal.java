@@ -28,9 +28,11 @@ class Solution {
                 TreeNode node=q.poll();
                 int val=node.val;
                 if(flag){
+                    // value head pe add krta jata hai
                     list.addFirst(val);
                 }
                 else{
+                    // value tail pe add krta jata hai
                     list.addLast(val);
                 }
                 if(node.left!=null){
