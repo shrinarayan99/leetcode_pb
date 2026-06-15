@@ -10,6 +10,25 @@
  */
 class Solution {
     public ListNode deleteMiddle(ListNode head) {
+        if(head==null || head.next==null) return null;
+        ListNode point=head;
+        ListNode slow=head;
+        ListNode fast=head;
+
+        while(fast!=null && fast.next!=null) {
+            point=slow;
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        point.next=point.next.next;
+
+        return head;
+    }
+}
+
+/*
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
         if(head==null) return null;
         int count=0;
         ListNode pointer=head;
@@ -28,3 +47,5 @@ class Solution {
         return head;
     }
 }
+
+*/
