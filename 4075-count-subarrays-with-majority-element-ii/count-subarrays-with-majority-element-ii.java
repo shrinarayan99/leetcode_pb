@@ -1,87 +1,27 @@
-import java.util.*;
+//https://www.youtube.com/watch?v=d8gBjEG6Ouc
 
 class Solution {
-
-    class SegmentTree {
-        int[] tree;
-        int n;
-
-        SegmentTree(int n) {
-            this.n = n;
-            tree = new int[4 * n];
-        }
-
-        void update(int node, int start, int end, int idx) {
-            if (start == end) {
-                tree[node]++;
-                return;
-            }
-
-            int mid = (start + end) / 2;
-
-            if (idx <= mid)
-                update(2 * node, start, mid, idx);
-            else
-                update(2 * node + 1, mid + 1, end, idx);
-
-            tree[node] = tree[2 * node] + tree[2 * node + 1];
-        }
-
-        int query(int node, int start, int end, int l, int r) {
-            if (r < start || end < l)
-                return 0;
-
-            if (l <= start && end <= r)
-                return tree[node];
-
-            int mid = (start + end) / 2;
-
-            return query(2 * node, start, mid, l, r)
-                    + query(2 * node + 1, mid + 1, end, l, r);
-        }
-    }
-
     public long countMajoritySubarrays(int[] nums, int target) {
 
-        int n = nums.length;
+        HashMap<Long,Long> map=new HashMap<>();
+        map.put(0L,1L);
+        long cumelativeSum=0;
+        long result=0L;
+        long validpoints=0L;
+        for(int i=0;i<nums.length;i++){
+            
+            if(nums[i]==target){
+                validpoints+=map.get(cumelativeSum);
+                cumelativeSum++;
+            }
+            else{
+                cumelativeSum--;
+                validpoints-=map.getOrDefault(cumelativeSum,0L);
+            }
+            map.put(cumelativeSum,map.getOrDefault(cumelativeSum,0L)+1);
 
-        // Prefix sums after converting
-        long[] prefix = new long[n + 1];
-
-        for (int i = 0; i < n; i++) {
-            prefix[i + 1] = prefix[i] + (nums[i] == target ? 1 : -1);
+            result+=validpoints;
         }
-
-        // Coordinate Compression
-        long[] sorted = prefix.clone();
-        Arrays.sort(sorted);
-
-        Map<Long, Integer> map = new HashMap<>();
-        int idx = 0;
-
-        for (long x : sorted) {
-            if (!map.containsKey(x))
-                map.put(x, idx++);
-        }
-
-        SegmentTree st = new SegmentTree(idx);
-
-        long ans = 0;
-
-        // Insert prefix[0]
-        st.update(1, 0, idx - 1, map.get(prefix[0]));
-
-        for (int i = 1; i <= n; i++) {
-
-            int pos = map.get(prefix[i]);
-
-            // Count previous prefix sums < current prefix sum
-            if (pos > 0)
-                ans += st.query(1, 0, idx - 1, 0, pos - 1);
-
-            st.update(1, 0, idx - 1, pos);
-        }
-
-        return ans;
+        return result;
     }
 }
