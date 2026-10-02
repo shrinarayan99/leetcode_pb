@@ -1,23 +1,32 @@
+
 class Solution {
-    List<String> list=new ArrayList<>();
+    List<String> list;
     public List<String> generateParenthesis(int n) {
+        list=new ArrayList<>();
         StringBuilder sb=new StringBuilder();
-        sol(n,sb,0,0);
+        generate(n,n,sb);
         return list;
+
     }
-    public void sol(int n,StringBuilder sb,int open,int close){
-        if(sb.length()==2*n){
-            list.add(sb.toString());
+    public void generate(int opened,int closed,StringBuilder sb){
+        if(opened>closed){
             return;
         }
-        if(open<n){
-            sol(n,sb.append("("),open+1,close);
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        if(close<open){
-            sol(n,sb.append(")"),open,close+1);
-            sb.deleteCharAt(sb.length() - 1);
+        if(opened==0 && closed==0){
+            list.add(new String(sb));
+            return;
         }
         
+       if(opened>0){
+            sb.append('(');
+            generate(opened-1,closed,sb);
+            sb.deleteCharAt(sb.length()-1);
+       }
+        if(closed>0){
+            sb.append(')');
+            generate(opened,closed-1,sb);
+            sb.deleteCharAt(sb.length()-1);
+        }
+
     }
 }
