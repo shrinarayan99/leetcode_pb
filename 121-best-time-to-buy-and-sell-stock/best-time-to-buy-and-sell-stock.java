@@ -1,41 +1,31 @@
 class Solution {
     public int maxProfit(int[] prices) {
-        int min=prices[0];
-        int idx1=0;
-        int idx2=0;
-        int max=prices[0];
-        int profit=0;
-        for(int i=1;i<prices.length;i++){
-            if(prices[i]>max ||( prices[i]>min && idx1<idx2)){
-                max=prices[i];
-                idx1=i;
-            }
-            else if(prices[i]<min){
-                min=prices[i];
-                idx2=i;
-            }
-            if(idx1>idx2){
-                profit=Math.max(profit,max-min);
-            }
+        int n=prices.length;
+
+        //always sell in right when but
+        int[] max=new int[n];
+        max[n-1]=prices[n-1];
+
+        // // always buy in left
+        // int[] min=new int[n];
+        // min[0]=prices[0];
+
+        // for(int i=1;i<n;i++){
+        //     min[i]=Math.min(min[i-1],prices[i]);
+        // }
+        for(int i=n-2;i>=0;i--){
+            max[i]=Math.max(max[i+1],prices[i]);
         }
-        return profit;
+
+        int result=0;
+        // for(int i=0;i<n;i++){
+        //     result=Math.max(result,max[i]-min[i]);
+        // }
+
+        //check for everyday buy but sell on right max day
+        for(int i=0;i<n;i++){
+            result=Math.max(result,max[i]-prices[i]);
+        }
+        return result;
     }
 }
-
-/*cleaner verson
-
-class Solution {
-    public int maxProfit(int[] prices) {
-        int min = prices[0];
-        int profit = 0;
-        for (int i = 1; i < prices.length; i++) {
-            if (prices[i] < min) {
-                min = prices[i];
-            } else {
-                profit = Math.max(profit, prices[i] - min);
-            }
-        }
-        return profit;
-    }
-}
-*/
